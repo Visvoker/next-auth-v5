@@ -1,5 +1,11 @@
 import * as z from "zod";
 
+export const ResetSchema = z.object({
+  email: z.string().refine((val) => /\S+@\S+\.\S+/.test(val), {
+    message: "Email is required",
+  }),
+});
+
 export const LoginSchema = z.object({
   email: z.string().refine((val) => /\S+@\S+\.\S+/.test(val), {
     message: "Email或密碼錯誤",

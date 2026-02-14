@@ -10,39 +10,30 @@ import { CardWrapper } from "@/components/auth/card-wrapper";
 import { FormError } from "@/components/form-error";
 import { FormSuccess } from "@/components/form-success";
 
-import { LoginSchema } from "@/schemas";
-import { login } from "@/actions/login";
+import { register } from "@/actions/register";
+import { ResetSchema } from "@/schemas";
 import { useState, useTransition } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
+import { reset } from "@/actions/reset";
 
-const LoginForm = () => {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get("callbackUrl");
-  const urlError =
-    searchParams.get("error") === "OAuthAccountNotLinked"
-      ? "Email already in use with different provider!"
-      : "";
-
+const ResetForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof LoginSchema>>({
-    resolver: zodResolver(LoginSchema),
+  const form = useForm<z.infer<typeof ResetSchema>>({
+    resolver: zodResolver(ResetSchema),
     defaultValues: {
       email: "",
-      password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof LoginSchema>) => {
+  const onSubmit = (values: z.infer<typeof ResetSchema>) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
       try {
-        const data = await login(values);
+        const data = await reset(values);
 
         if (data?.error) {
           form.reset();
@@ -63,16 +54,14 @@ const LoginForm = () => {
 
   return (
     <CardWrapper
-      headerLabel="Welcome back"
-      backButtonLabel="Don't have an account"
-      backButtonHref="/auth/register"
-      showSocial
+      headerLabel="Forgot your password?"
+      backButtonLabel="Back to login"
+      backButtonHref="/auth/login"
     >
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
         {/* Email */}
         <div className="flex flex-col gap-1.5">
           <label className="text-sm font-medium">Email</label>
-
           <Controller
             control={form.control}
             name="email"
@@ -93,41 +82,14 @@ const LoginForm = () => {
           />
         </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium">Password</label>
-
-          <Controller
-            control={form.control}
-            name="password"
-            render={({ field, fieldState }) => (
-              <>
-                <Input type="password" placeholder="••••••••" {...field} />
-                {fieldState.error && (
-                  <p className="text-sm text-destructive">
-                    {fieldState.error.message}
-                  </p>
-                )}
-                <Button
-                  className="px-0 font-normal self-start"
-                  size="sm"
-                  variant="link"
-                  asChild
-                >
-                  <Link href="/auth/reset">forgot password?</Link>
-                </Button>
-              </>
-            )}
-          />
-        </div>
-
-        <FormError message={error || urlError} />
+        <FormError message={error} />
         <FormSuccess message={success} />
         <Button type="submit" className="w-full">
-          Login
+          Send reset email
         </Button>
       </form>
     </CardWrapper>
   );
 };
 
-export default LoginForm;
+export default ResetForm;
