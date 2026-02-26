@@ -89,50 +89,6 @@ export const login = async (values: z.infer<typeof LoginSchema>) => {
     }
   }
 
-  // if (existingUser.isTwoFactorEnabled && existingUser.email) {
-  //   // ① 沒有 code → 寄信 → 顯示輸入框
-  //   if (!code) {
-  //     const twoFactorToken = await generateTwoFactorToken(existingUser.email);
-  //     await sendTwoFactorTokenEmail(twoFactorToken.email, twoFactorToken.token);
-
-  //     return { twoFactor: true };
-  //   }
-
-  //   // ② 有 code → 驗證 code
-  //   const twoFactorToken = await getTwoFactorTokenByEmail(existingUser.email);
-
-  //   if (!twoFactorToken) return { error: "Invalid code!" };
-  //   if (twoFactorToken.token !== code) return { error: "Invalid code!" };
-
-  //   const hasExpired = new Date(twoFactorToken.expires) < new Date();
-  //   if (hasExpired) return { error: "Code expired!" };
-
-  //   await prisma.twoFactorToken.delete({ where: { id: twoFactorToken.id } });
-
-  //   // ③ 先清掉舊 confirmation，再建立新的
-  //   const existingConfirmation = await getTwoFactorConfirmationByUserId(
-  //     existingUser.id,
-  //   );
-  //   if (existingConfirmation) {
-  //     await prisma.twoFactorConfirmation.delete({
-  //       where: { id: existingConfirmation.id },
-  //     });
-  //   }
-
-  //   await prisma.twoFactorConfirmation.create({
-  //     data: { userId: existingUser.id },
-  //   });
-
-  //   // ✅ ④ code 驗證成功 → 直接登入並 redirect
-  //   await signIn("credentials", {
-  //     email,
-  //     password,
-  //     redirectTo: DEFAULT_LOGIN_REDIRECT,
-  //   });
-
-  //   return { success: "Logged in" };
-  // }
-
   try {
     await signIn("credentials", {
       email,
