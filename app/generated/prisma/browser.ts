@@ -32,3 +32,18 @@ export type Account = Prisma.AccountModel
  * 
  */
 export type VerificationToken = Prisma.VerificationTokenModel
+/**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
+ * Model TwoFactorToken
+ * 
+ */
+export type TwoFactorToken = Prisma.TwoFactorTokenModel
+/**
+ * Model TwoFactorConfirmation
+ * 
+ */
+export type TwoFactorConfirmation = Prisma.TwoFactorConfirmationModel
