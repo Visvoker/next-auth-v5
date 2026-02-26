@@ -24,6 +24,7 @@ const LoginForm = () => {
       ? "Email already in use with different provider!"
       : "";
 
+  const [showTwoFactor, setShowTwoFactor] = useState(false);
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
@@ -33,6 +34,7 @@ const LoginForm = () => {
     defaultValues: {
       email: "",
       password: "",
+      code: "",
     },
   });
 
@@ -52,8 +54,13 @@ const LoginForm = () => {
 
         if (data?.success) {
           form.reset();
+          setShowTwoFactor(false);
           setSuccess(data.success);
           return;
+        }
+
+        if (data?.twoFactor) {
+          setShowTwoFactor(true);
         }
       } catch (error) {
         setError("Something went wrong");
@@ -69,61 +76,93 @@ const LoginForm = () => {
       showSocial
     >
       <form className="space-y-4" onSubmit={form.handleSubmit(onSubmit)}>
-        {/* Email */}
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium">Email</label>
-
-          <Controller
-            control={form.control}
-            name="email"
-            render={({ field, fieldState }) => (
-              <>
-                <Input
-                  type="email"
-                  placeholder="example@gmail.com"
-                  {...field}
+        <>
+          {showTwoFactor && (
+            <div className="flex flex-col gap-1.5">
+              <label className="text-sm font-medium">Two Factor Code</label>
+              <Controller
+                control={form.control}
+                name="code"
+                render={({ field, fieldState }) => (
+                  <>
+                    <Input
+                      inputMode="numeric"
+                      pattern="[0-9]*"
+                      placeholder="123456"
+                      {...field}
+                    />
+                    {fieldState.error && (
+                      <p className="text-sm text-destructive">
+                        {fieldState.error.message}
+                      </p>
+                    )}
+                  </>
+                )}
+              />
+            </div>
+          )}
+          {!showTwoFactor && (
+            <>
+              {/* Email */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">Email</label>
+                <Controller
+                  control={form.control}
+                  name="email"
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Input
+                        type="email"
+                        placeholder="example@gmail.com"
+                        {...field}
+                      />
+                      {fieldState.error && (
+                        <p className="text-sm text-destructive">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                    </>
+                  )}
                 />
-                {fieldState.error && (
-                  <p className="text-sm text-destructive">
-                    {fieldState.error.message}
-                  </p>
-                )}
-              </>
-            )}
-          />
-        </div>
+              </div>
 
-        <div className="flex flex-col gap-1.5">
-          <label className="text-sm font-medium">Password</label>
-
-          <Controller
-            control={form.control}
-            name="password"
-            render={({ field, fieldState }) => (
-              <>
-                <Input type="password" placeholder="••••••••" {...field} />
-                {fieldState.error && (
-                  <p className="text-sm text-destructive">
-                    {fieldState.error.message}
-                  </p>
-                )}
-                <Button
-                  className="px-0 font-normal self-start"
-                  size="sm"
-                  variant="link"
-                  asChild
-                >
-                  <Link href="/auth/reset">forgot password?</Link>
-                </Button>
-              </>
-            )}
-          />
-        </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-sm font-medium">Password</label>
+                <Controller
+                  control={form.control}
+                  name="password"
+                  render={({ field, fieldState }) => (
+                    <>
+                      <Input
+                        type="password"
+                        placeholder="••••••••"
+                        {...field}
+                      />
+                      {fieldState.error && (
+                        <p className="text-sm text-destructive">
+                          {fieldState.error.message}
+                        </p>
+                      )}
+                      <Button
+                        className="px-0 font-normal self-start"
+                        size="sm"
+                        variant="link"
+                        asChild
+                      >
+                        <Link href="/auth/reset">forgot password?</Link>
+                      </Button>
+                    </>
+                  )}
+                />
+              </div>
+            </>
+          )}
+        </>
 
         <FormError message={error || urlError} />
         <FormSuccess message={success} />
-        <Button type="submit" className="w-full">
-          Login
+        <Button disabled={isPending} type="submit" className="w-full">
+          {showTwoFactor ? "Confirm" : "Login"}
         </Button>
       </form>
     </CardWrapper>

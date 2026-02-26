@@ -387,7 +387,9 @@ export const ModelName = {
   User: 'User',
   Account: 'Account',
   VerificationToken: 'VerificationToken',
-  PasswordResetToken: 'PasswordResetToken'
+  PasswordResetToken: 'PasswordResetToken',
+  TwoFactorToken: 'TwoFactorToken',
+  TwoFactorConfirmation: 'TwoFactorConfirmation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -403,7 +405,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "verificationToken" | "passwordResetToken"
+    modelProps: "user" | "account" | "verificationToken" | "passwordResetToken" | "twoFactorToken" | "twoFactorConfirmation"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -703,6 +705,154 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    TwoFactorToken: {
+      payload: Prisma.$TwoFactorTokenPayload<ExtArgs>
+      fields: Prisma.TwoFactorTokenFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TwoFactorTokenFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TwoFactorTokenFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>
+        }
+        findFirst: {
+          args: Prisma.TwoFactorTokenFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TwoFactorTokenFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>
+        }
+        findMany: {
+          args: Prisma.TwoFactorTokenFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>[]
+        }
+        create: {
+          args: Prisma.TwoFactorTokenCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>
+        }
+        createMany: {
+          args: Prisma.TwoFactorTokenCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TwoFactorTokenCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>[]
+        }
+        delete: {
+          args: Prisma.TwoFactorTokenDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>
+        }
+        update: {
+          args: Prisma.TwoFactorTokenUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>
+        }
+        deleteMany: {
+          args: Prisma.TwoFactorTokenDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TwoFactorTokenUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TwoFactorTokenUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>[]
+        }
+        upsert: {
+          args: Prisma.TwoFactorTokenUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorTokenPayload>
+        }
+        aggregate: {
+          args: Prisma.TwoFactorTokenAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTwoFactorToken>
+        }
+        groupBy: {
+          args: Prisma.TwoFactorTokenGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorTokenGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TwoFactorTokenCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorTokenCountAggregateOutputType> | number
+        }
+      }
+    }
+    TwoFactorConfirmation: {
+      payload: Prisma.$TwoFactorConfirmationPayload<ExtArgs>
+      fields: Prisma.TwoFactorConfirmationFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TwoFactorConfirmationFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TwoFactorConfirmationFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>
+        }
+        findFirst: {
+          args: Prisma.TwoFactorConfirmationFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TwoFactorConfirmationFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>
+        }
+        findMany: {
+          args: Prisma.TwoFactorConfirmationFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>[]
+        }
+        create: {
+          args: Prisma.TwoFactorConfirmationCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>
+        }
+        createMany: {
+          args: Prisma.TwoFactorConfirmationCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TwoFactorConfirmationCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>[]
+        }
+        delete: {
+          args: Prisma.TwoFactorConfirmationDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>
+        }
+        update: {
+          args: Prisma.TwoFactorConfirmationUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>
+        }
+        deleteMany: {
+          args: Prisma.TwoFactorConfirmationDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TwoFactorConfirmationUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TwoFactorConfirmationUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>[]
+        }
+        upsert: {
+          args: Prisma.TwoFactorConfirmationUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TwoFactorConfirmationPayload>
+        }
+        aggregate: {
+          args: Prisma.TwoFactorConfirmationAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTwoFactorConfirmation>
+        }
+        groupBy: {
+          args: Prisma.TwoFactorConfirmationGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorConfirmationGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TwoFactorConfirmationCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TwoFactorConfirmationCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -751,7 +901,8 @@ export const UserScalarFieldEnum = {
   password: 'password',
   role: 'role',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  isTwoFactorEnabled: 'isTwoFactorEnabled'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -794,6 +945,24 @@ export const PasswordResetTokenScalarFieldEnum = {
 } as const
 
 export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
+
+
+export const TwoFactorTokenScalarFieldEnum = {
+  id: 'id',
+  email: 'email',
+  token: 'token',
+  expires: 'expires'
+} as const
+
+export type TwoFactorTokenScalarFieldEnum = (typeof TwoFactorTokenScalarFieldEnum)[keyof typeof TwoFactorTokenScalarFieldEnum]
+
+
+export const TwoFactorConfirmationScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId'
+} as const
+
+export type TwoFactorConfirmationScalarFieldEnum = (typeof TwoFactorConfirmationScalarFieldEnum)[keyof typeof TwoFactorConfirmationScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -865,6 +1034,13 @@ export type EnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
  * Reference to a field of type 'UserRole[]'
  */
 export type ListEnumUserRoleFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'UserRole[]'>
+    
+
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -994,6 +1170,8 @@ export type GlobalOmitConfig = {
   account?: Prisma.AccountOmit
   verificationToken?: Prisma.VerificationTokenOmit
   passwordResetToken?: Prisma.PasswordResetTokenOmit
+  twoFactorToken?: Prisma.TwoFactorTokenOmit
+  twoFactorConfirmation?: Prisma.TwoFactorConfirmationOmit
 }
 
 /* Types for Logging */

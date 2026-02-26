@@ -15,6 +15,7 @@ export const LoginSchema = z.object({
     message: "Email或密碼錯誤",
   }),
   password: z.string().min(1, "Email或密碼錯誤"),
+  code: z.string().optional(),
 });
 
 export const RegisterSchema = z.object({

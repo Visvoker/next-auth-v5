@@ -1,14 +1,16 @@
-import NextAuth from "next-auth";
-import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
+import NextAuth from "next-auth";
+import Google from "next-auth/providers/google";
+import Discord from "next-auth/providers/discord";
+import type { Provider } from "next-auth/providers";
+import Credentials from "next-auth/providers/credentials";
 
 import prisma from "@/lib/prisma";
 import { LoginSchema } from "@/schemas";
-import { getUserByEmail, getUserById } from "@/data/user";
 import { PrismaAdapter } from "@auth/prisma-adapter";
-import type { Provider } from "next-auth/providers";
-import Google from "next-auth/providers/google";
-import Discord from "next-auth/providers/discord";
+import { UserRole } from "@/app/generated/prisma/enums";
+import { getUserByEmail, getUserById } from "@/data/user";
+import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
 
 const providers: Provider[] = [
   Google({
@@ -69,7 +71,18 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       // Prevent sign in without email verification
       if (!existingUser?.emailVerified) return false;
 
-      // TODO: Add 2FA check
+      if (existingUser.isTwoFactorEnabled) {
+        const twoFactorConfirmation = await getTwoFactorConfirmationByUserId(
+          existingUser.id,
+        );
+
+        if (!twoFactorConfirmation) return false;
+
+        // Delete two factor confirmation for next sign in
+        await prisma.twoFactorConfirmation.delete({
+          where: { id: twoFactorConfirmation.id },
+        });
+      }
 
       return true;
     },
@@ -81,7 +94,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role;
+        session.user.role = token.role as UserRole;
       }
 
       return session;
@@ -92,8 +105,6 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       const existingUser = await getUserById(token.sub);
 
       if (!existingUser) return token;
-
-      token.role = existingUser.role;
 
       return token;
     },
