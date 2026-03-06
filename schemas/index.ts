@@ -1,4 +1,14 @@
+import { UserRole } from "@/app/generated/prisma/enums";
 import * as z from "zod";
+
+export const SettingsSchema = z.object({
+  name: z.string().optional(),
+  isTwoFactorEnabled: z.boolean().optional(),
+  role: z.enum([UserRole.ADMIN, UserRole.USER]),
+  email: z.string().email("Invalid email").optional(),
+  password: z.string().min(6, "Minimum of 6 characters required").optional(),
+  newPassword: z.string().min(6, "Minimum of 6 characters required").optional(),
+});
 
 export const NewPasswordSchema = z.object({
   password: z.string().min(6, "Minimum of 6 characters required"),

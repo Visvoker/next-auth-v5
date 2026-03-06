@@ -11,6 +11,7 @@ import { PrismaAdapter } from "@auth/prisma-adapter";
 import { UserRole } from "@/app/generated/prisma/enums";
 import { getUserByEmail, getUserById } from "@/data/user";
 import { getTwoFactorConfirmationByUserId } from "@/data/two-factor-confirmation";
+import { getAccountByUserId } from "./data/account";
 
 const providers: Provider[] = [
   Google({
@@ -86,7 +87,7 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
       return true;
     },
     async session({ token, session }) {
-      console.log({ sessionToke: token });
+      console.log({ sessionTokenName: token.name });
 
       if (token.sub && session.user) {
         session.user.id = token.sub;
@@ -100,6 +101,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
         session.user.isTwoFactorEnabled = token.isTwoFactorEnabled as boolean;
       }
 
+      if (session.user) {
+        session.user.name = token.name;
+        session.user.email = token.email ?? session.user.email ?? null;
+        session.user.isOAuth = token.isOAuth as boolean;
+      }
+
       return session;
     },
     async jwt({ token }) {
@@ -109,6 +116,12 @@ export const { auth, handlers, signIn, signOut } = NextAuth({
 
       if (!existingUser) return token;
 
+      const existingAccount = await getAccountByUserId(existingUser.id);
+
+      token.isOAuth = !!existingAccount;
+
+      token.name = existingUser.name;
+      token.email = existingUser.email;
       token.role = existingUser.role;
       token.isTwoFactorEnabled = existingUser.isTwoFactorEnabled;
 
